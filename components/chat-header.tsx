@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { VisibilityType, VisibilitySelector } from './visibility-selector';
 import { useDeepResearch } from '@/lib/deep-research-context';
 import { models, reasoningModels } from '@/lib/ai/models';
+import { AuthMenu } from './auth-menu';
 
 function PureChatHeader({
   chatId,
@@ -98,58 +99,9 @@ function PureChatHeader({
         </Link>
       </Button> */}
 
-      <Button
-        variant="outline"
-        className="hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4 md:ml-auto"
-        asChild
-      >
-        <Link
-          href="https://github.com/nickscamara/extract-chat"
-          target="_blank"
-        >
-          <span className="flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-            Star on GitHub
-          </span>
-        </Link>
-      </Button>
-
-      <Button
-        variant="outline"
-        className="hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4 "
-        asChild
-      >
-        <Link href="https://firecrawl.dev/" target="_blank">
-          <span className="flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-            </svg>
-            Get Firecrawl API Key
-          </span>
-        </Link>
-      </Button>
+      <div className="order-4 md:ml-auto">
+        <AuthMenu />
+      </div>
     </header>
   );
 }

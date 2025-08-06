@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Analytics } from '@vercel/analytics/react';
 import { DeepResearchProvider } from '@/lib/deep-research-context';
+import { SessionProvider } from '@/components/session-provider';
 
 import './globals.css';
 
@@ -66,10 +67,12 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <DeepResearchProvider>
-            <Toaster position="top-center" />
-            {children}
-          </DeepResearchProvider>
+          <SessionProvider>
+            <DeepResearchProvider>
+              <Toaster position="top-center" />
+              {children}
+            </DeepResearchProvider>
+          </SessionProvider>
         </ThemeProvider>
         <Analytics />
       </body>
