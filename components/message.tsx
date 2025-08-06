@@ -71,7 +71,7 @@ const PurePreviewMessage = ({
 
       message.toolInvocations.forEach((toolInvocation: any) => {
         try {
-          if (toolInvocation.toolName === 'search' && toolInvocation.state === 'result') {
+          if (toolInvocation.toolName === 'search' && toolInvocation.state === 'result' && toolInvocation.result?.data) {
             const searchResults = toolInvocation.result.data.map((item: any, index: number) => ({
               title: item.title,
               url: item.url,
@@ -256,13 +256,13 @@ const PurePreviewMessage = ({
                       <div key={toolCallId}>
                         {toolName === 'search' ? (
                           <SearchResults
-                            results={result.data.map((item: any) => ({
+                            results={result.data ? result.data.map((item: any) => ({
                               title: item.title,
                               url: item.url,
                               description: item.description,
                               source: new URL(item.url).hostname,
                               favicon: item.favicon,
-                            }))}
+                            })) : []}
                           />
                         ) : toolName === 'extract' ? (
                           <ExtractResults

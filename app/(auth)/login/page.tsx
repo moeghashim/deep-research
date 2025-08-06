@@ -31,7 +31,10 @@ export default function Page() {
       toast.error('Failed validating your submission!');
     } else if (state.status === 'success') {
       setIsSuccessful(true);
-      router.refresh();
+      toast.success('Successfully logged in!');
+      setTimeout(() => {
+        router.push('/');
+      }, 500);
     }
   }, [state.status, router]);
 

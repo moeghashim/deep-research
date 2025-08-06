@@ -55,10 +55,29 @@ const app = new FirecrawlApp({
 
 // const reasoningModel = customModel(process.env.REASONING_MODEL || 'o1-mini', true);
 
+export async function GET(request: Request) {
+  console.log('=== Chat API GET Test ===');
+  return new Response('Chat API is working', { status: 200 });
+}
+
 export async function POST(request: Request) {
+  console.log('=== Chat API Request START ===');
+  
+  console.log('Request headers:', Object.fromEntries(request.headers.entries()));
+  console.log('Environment check:', {
+    hasFirecrawlKey: !!process.env.FIRECRAWL_API_KEY,
+    hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+    hasPostgresUrl: !!process.env.POSTGRES_URL,
+    authSecret: !!process.env.AUTH_SECRET
+  });
+  
   const maxDuration = process.env.MAX_DURATION
     ? parseInt(process.env.MAX_DURATION)
     : 300; 
+  
+  console.log('Parsing request body...');
+  const body = await request.json();
+  console.log('Request body:', body);
   
   const {
     id,
@@ -72,12 +91,19 @@ export async function POST(request: Request) {
     modelId: string; 
     reasoningModelId: string;
     experimental_deepResearch?: boolean;
-  } = await request.json();
+  } = body;
 
   let session = await auth();
+  
+  console.log('Session status:', { 
+    hasSession: !!session, 
+    hasUser: !!session?.user, 
+    userEmail: session?.user?.email 
+  });
 
   // If no session exists, create an anonymous session
   if (!session?.user) {
+    console.log('No authenticated session found, attempting to create anonymous session');
     try {
       const result = await signIn('credentials', {
         redirect: false,
@@ -120,8 +146,11 @@ export async function POST(request: Request) {
   }
 
   if (!session?.user?.id) {
-    return new Response('Failed to create session', { status: 500 });
+    console.error('No valid user session after authentication attempt');
+    return new Response('Authentication required. Please log in first.', { status: 401 });
   }
+  
+  console.log('Valid user session found:', session.user.email);
 
   // Verify user exists in database before proceeding
   try {
@@ -743,6 +772,9 @@ export async function DELETE(request: Request) {
 
     return new Response('Chat deleted', { status: 200 });
   } catch (error) {
+    console.error('=== Chat API Error ===');
+    console.error('Error details:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
     return new Response('An error occurred while processing your request', {
       status: 500,
     });
